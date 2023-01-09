@@ -1,0 +1,68 @@
+@layout('auth/app')
+@section('content')
+@include('auth/partials/_head')
+
+<section>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-xl-7"><img class="bg-img-cover bg-center" src="/viho-template/images/login/2.jpg" alt="looginpage"></div>
+            <div class="col-xl-5 p-0">
+              <div class="login-card">
+                <form class="theme-form login-form" action="{{ route('auth.login') }}" method="POST">
+                    {{ csrfField() }}
+                  <h4>Connexion</h4>
+                  <h6>Bienvenue! Utilisez vos identifiants pour vous connecter.</h6>
+
+                  <div class="form-group">
+                    <label>Adresse mail</label>
+                    <div class="input-group"><span class="input-group-text"><i class="icon-email"></i></span>
+                      <input class="form-control" type="email" required placeholder="test@gmail.com" name="email">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Mot de passe</label>
+                    <div class="input-group"  id="show_hide_password_login"><span class="input-group-text"><i class="icon-lock"></i></span>
+                      <input class="form-control" type="password" name="password" required placeholder="*********">
+                      <span class="input-group-text">
+                        <a href="#">
+                        <i class="fa fa-eye-slash password-login" aria-hidden="true"></i>
+                        </a>
+                        </span>
+                    </div>
+                    @if(flashMessages.has('errors.current'))
+                    <span class="text-danger">{{ flashMessages.get('errors.current') }}</span>
+                  @endif
+                  </div>
+                  <div class="form-group">
+                    <div class="checkbox">
+
+                    </div>
+                    <a class="link" href="forget-password.html">Mot de passe oublié?</a>
+                  </div>
+                  <div class="form-group">
+                    <button class="btn btn-primary btn-block" type="submit">Se connecter</button>
+                  </div>
+
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+  </section>
+  @include('auth/partials/_script')
+  <script>
+    $("#show_hide_password_login a").on('click', function(event) {
+           event.preventDefault();
+           if($('#show_hide_password_login input').attr("type") == "text"){
+               $('#show_hide_password_login input').attr('type', 'password');
+               $('#show_hide_password_login .password-login').addClass( "fa-eye-slash" );
+               $('#show_hide_password_login .password-login').removeClass( "fa-eye" );
+           }else if($('#show_hide_password_login input').attr("type") == "password"){
+               $('#show_hide_password_login input').attr('type', 'text');
+               $('#show_hide_password_login .password-login').removeClass( "fa-eye-slash" );
+               $('#show_hide_password_login .password-login').addClass( "fa-eye" );
+           }
+       });
+   </script>
+  @endsection

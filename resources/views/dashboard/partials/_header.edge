@@ -1,0 +1,47 @@
+<div class="page-main-header">
+    <div class="main-header-right row m-0">
+      <div class="main-header-left">
+        <div class="logo-wrapper"><a href="#"><img class="img-fluid" width="170" height="170" style="object-fit:cover" src="/viho-template/images/logo/logo.png" alt=""></a></div>
+        <div class="dark-logo-wrapper"><a href="#"><img width="100" height="100" style="object-fit:cover"class="img-fluid" src="/viho-template/images/logo/logo-1.png" alt=""></a></div>
+        <div class="toggle-sidebar"><i class="status_toggle middle" data-feather="align-center" id="sidebar-toggle"></i></div>
+      </div>
+
+      <div class="nav-right col pull-right right-menu p-0">
+        <ul class="nav-menus">
+          <li><a class="text-dark" href="#!" onclick="javascript:toggleFullScreen()"><i data-feather="maximize"></i></a></li>
+
+          <li class="onhover-dropdown p-0">
+            <button class="btn btn-primary-light" type="button" data-bs-toggle="modal" data-original-title="test" data-bs-target="#exampleModal">Se déconnecter</button>
+          </li>
+        </ul>
+      </div>
+      <div class="d-lg-none mobile-toggle pull-right w-auto"><i data-feather="more-horizontal"></i></div>
+    </div>
+  </div>
+
+
+
+
+    <div class="card-body btn-showcase">
+      <!-- Simple demo-->
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title fs-3 fw-bold" id="exampleModalLabel" style="color:red">Attention </h5>
+              <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body fs-4 d-flex justify-content-center ">Etes-vous sûr de fermer la session ?</div>
+            <div class="modal-footer">
+              <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Non</button>
+              <a class="btn btn-danger"  href="{{route('auth.logout')}}" style="color:white">Oui</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
