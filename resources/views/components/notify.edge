@@ -1,0 +1,63 @@
+<script >
+  if('{{flashMessages.has('notification')}}' == true || '{{flashMessages.has('notification')}}' == 'true'){
+    $.notify({
+     title:'{{flashMessages.get('notification.title')}}',
+     message:'{{flashMessages.get('notification.message')}}',
+  },
+  {
+     type:'{{flashMessages.get('notification.type')}}',
+     allow_dismiss:true,
+     newest_on_top:false ,
+     mouse_over:false,
+     showProgressbar:false,
+     spacing:10,
+     timer:2000,
+     placement:{
+       from:'top',
+       align:'right'
+     },
+     offset:{
+       x:30,
+       y:30
+     },
+     delay:1000 ,
+     z_index:10000,
+     animate:{
+       enter:'animated jello',
+       exit:'animated bounce'
+   }
+}
+)
+  } else {
+    if('{{defaultNotify}}' != 'false'){
+    $.notify({
+     title:'{{title}}',
+     message:'{{message}}',
+  },
+  {
+     type:'success',
+     allow_dismiss:true,
+     newest_on_top:false ,
+     mouse_over:false,
+     showProgressbar:'{{loader}}' == 'true' || '{{loader}}' == true ? true : false,
+     spacing:10,
+     timer:2000,
+     placement:{
+       from:'top',
+       align:'right'
+     },
+     offset:{
+       x:30,
+       y:30
+     },
+     delay:500 ,
+     z_index:10000,
+     animate:{
+       enter:'animated jello',
+       exit:'animated bounce'
+   }
+})
+}
+  }
+
+</script>

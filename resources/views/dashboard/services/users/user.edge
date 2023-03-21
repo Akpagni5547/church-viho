@@ -1,0 +1,165 @@
+@layout('dashboard/app')
+@section('content')
+@include('dashboard/partials/_head')
+
+@include('dashboard/partials/_loader')
+
+<div class="page-wrapper" id="pageWrapper">
+    @include('dashboard/partials/_header')
+
+    <div class="page-body-wrapper horizontal-menu">
+        @include('dashboard/partials/_sidebar')
+
+        <div class="page-body">
+            {{--  breadcrumb  --}}
+            <div class="container-fluid">
+                <div class="page-header">
+                  <div class="row">
+                    <div class="col-sm-6 mt-4">
+                      <h3>Gestion des agents</h3>
+                      <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Tableau de bord</a></li>
+                        <li class="breadcrumb-item active">Liste utilisateur</li>
+                      </ol>
+                    </div>
+                    <div class="col-sm-6"></div>
+                  </div>
+                </div>
+              </div>
+            {{--  breadcrumb  --}}
+
+            <div class="card-body btn-showcase">
+                <div class="modal fade" id="delete-user-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title fs-3 fw-bold" id="exampleModalLabel" style="color:red">Attention </h5>
+                            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body fs-4 d-flex justify-content-center ">Etes-vous sûr de vouloir supprimer cet utilisateur?</div>
+                          <div class="modal-footer">
+                            <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Non</button>
+                              <a
+                              class="btn btn-danger"
+                               href="#"
+                               id="delete-user"
+                                style="color:white">
+                                Oui
+                              </a>
+                          </div>
+                        </div>
+                      </div>
+                </div>
+            </div>
+            <div class="email-right-aside bookmark-tabcontent contacts-tabs">
+                <div class="card email-body radius-left">
+                    <div class="ps-0">
+                      <div class="tab-content">
+                        <div class="tab-pane fade active show" id="pills-personal" role="tabpanel" aria-labelledby="pills-personal-tab">
+                          <div class="card mb-0">
+                            <div class="card-header d-flex">
+                              <h5>Le personnel</h5><span class="f-14 pull-right mt-0">
+                                  <a href="{{route('users.create')}}" class="btn btn-primary btn-air-primary " type="button"><i class="fas fa-plus"></i><span class="ms-2">Ajouter</span></a>
+                            </span>
+                            </div>
+                            <div class="card-body p-0">
+                              <div class="row list-persons" id="addcon">
+                                <div class="col-xl-4 xl-50 col-md-5 box-col-6">
+                                  <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+                                  @each((user, index) in users)
+                                    <a class="contact-tab-{{index + 1}} nav-link {{ index == 0 ? 'active' : ''}}" id="v-pills-user-tab" data-bs-toggle="pill" onclick="activeDiv({{index + 1}})" href="#v-pills-user{{index + 1}}" role="tab" aria-controls="v-pills-user" aria-selected="true">
+                                      <div class="media">
+                                        <div class="media-body">
+                                          <h6> <span class="first_name_0">{{user.first_name}} </span><span class="last_name_0">{{user.last_name}}</span></h6>
+                                          <p class="email_add_0">{{user.email}}</p>
+                                        </div>
+                                      </div>
+                                    </a>
+                                    @end
+                                    </div>
+                                </div>
+                                <div class="col-xl-8 xl-50 col-md-7 box-col-6">
+                                  <div class="tab-content" id="v-pills-tabContent">
+                                    @each((user, index) in users)
+                                    <div class="tab-pane contact-tab-{{index + 1}} tab-content-child fade show {{ index == 0 ? 'active' : ''}}" id="v-pills-user{{index + 1}}" role="tabpanel" aria-labelledby="v-pills-user-tab">
+                                      <div class="profile-mail">
+                                        <div class="media align-items-center">
+                                          <div class="media-body mt-0">
+                                            <h5>
+                                                <span class="first_name_0">{{user.first_name}} </span>
+                                                <span class="last_name_0">
+                                                    {{user.last_name}}
+                                              @if(user.id == auth.user?.id)
+                                                <p class="text-success">Utilisateur actuellement connecté</p>
+                                              @endif
+                                                </span>
+                                            </h5>
+                                            <p class="email_add_0">{{user.email}}</p>
+                                            <ul>
+                                              @if(user.id != auth.user?.id)
+                                              <li>
+                                                <a  class="cursor-pointer" href="{{route('users.edit', {id: user.id})}}">
+                                                  Modifier
+                                                 </a>
+                                               </li>
+
+                                               <li>
+                                                <a class="cursor-pointer active-modal-delete-user" id="agentlist-{{user.id}}"  data-bs-toggle="modal" data-original-title="test" data-bs-target="#delete-user-modal" href="#">
+                                                  Supprimer
+                                                </a>
+                                              </li>
+                                              @endif
+                                            </ul>
+                                          </div>
+                                        </div>
+                                        <div class="email-general">
+                                          <h6 class="mb-3">Informations générales</h6>
+                                          <ul>
+                                            <li>Nom <span class="font-primary first_name_0">{{user.first_name}}</span></li>
+
+
+                                            <li>Adresse email <span class="font-primary email_add_0">{{user.email}} </span></li>
+                                            <li>Role utilisateur <span class="font-primary email_add_0">
+                                              {{user.role}}
+                                              </span></li>
+                                          </ul>
+                                        </div>
+                                      </div>
+                                    </div>
+                                @end
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+            </div>
+        </div>
+
+        @include('dashboard/partials/_footer')
+    </div>
+</div>
+
+
+@include('dashboard/partials/_script')
+@!component('components/notify', {
+  title: 'Chargement des utilisateur',
+  defaultNotify: 'true',
+  message: users.length == 0 ? 'Aucun utilisateur trouvé' : 'Chargement de la liste des utilisateurs réussie',
+})
+
+<script >
+    $('.active-modal-delete-user').click(function(){
+    let idDeleteUser=$(this).attr('id');
+    let userId = idDeleteUser.split('-')[1];
+    $('#delete-user').attr('href', "{{route('users.destroy', {id: 'userdelete'})}}".replace('userdelete', userId));
+  });
+  </script>
+
+
+
+@endsection

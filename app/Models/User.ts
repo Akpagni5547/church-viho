@@ -1,7 +1,9 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { column, beforeSave, BaseModel } from '@ioc:Adonis/Lucid/Orm'
+import { column, beforeSave, BaseModel, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import { RoleUser } from 'App/Enums/role_user'
+import ListCall from './ListCall'
+import Finance from './Finance'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -15,6 +17,9 @@ export default class User extends BaseModel {
 
   @column()
   public last_name: string
+
+  @column()
+  public phone: string
 
   @column({ serializeAs: null })
   public password: string
@@ -30,6 +35,12 @@ export default class User extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @hasMany(() => ListCall, { foreignKey: 'user_created' })
+  public listCalled: HasMany<typeof ListCall>
+
+  @hasMany(() => Finance, { foreignKey: 'user_do_it' })
+  public finances: HasMany<typeof Finance>
 
   @beforeSave()
   public static async hashPassword(user: User) {

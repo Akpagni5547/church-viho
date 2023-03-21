@@ -1,0 +1,259 @@
+@layout('dashboard/app')
+@section('content')
+@include('dashboard/partials/_head')
+
+@include('dashboard/partials/_loader')
+
+<div class="page-wrapper" id="pageWrapper">
+
+    @include('dashboard/partials/_header')
+
+
+    <div class="page-body-wrapper horizontal-menu">
+
+        @include('dashboard/partials/_sidebar')
+
+        <div class="page-body">
+            <div class="container-fluid">
+                <div class="page-header">
+                  <div class="row">
+                    <div class="col-sm-6 mt-4">
+                      <h3 class="text-transform-none">Gestion des entrées-sorties</h3>
+                      <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Tableau de bord</a></li>
+                        <li class="breadcrumb-item active">Liste des entrees-sorties</li>
+                      </ol>
+                    </div>
+                    <div class="col-sm-6"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="container-fluid">
+                <div class="email-wrap bookmark-wrap">
+                  <div class="row">
+                    <div class="col-xl-3 xl-30">
+                      <div class="email-sidebar"><a class="btn btn-primary email-aside-toggle" href="javascript:void(0)">bookmark filter</a>
+                        <div class="email-left-aside">
+
+                              <div class="card o-hidden border-0">
+                                <div class="bg-primary b-r-4 card-body">
+                                    <div class="media static-top-widget">
+                                    <div class="align-self-center text-center"><i data-feather="database"></i></div>
+                                    <div class="media-body"><span class="m-0">Solde</span>
+                                        <h4 class="mb-0 counter">{{solde.solde}}</h4><i class="icon-bg" data-feather="database"></i>
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
+
+                          <div class="card">
+                            <div class="card-header pb-0">
+                              <h5>Statistiques des Entrées/Sorties</h5>
+
+                            </div>
+                            <div class="card-body apex-chart">
+                              <div id="depense-piechart"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-9 col-md-12 box-col-8 xl-70">
+                      <div class="email-right-aside bookmark-tabcontent">
+                        <div class="card email-body radius-left">
+                          <div class="ps-0">
+                            <div class="tab-content">
+                                <div class="card">
+                                    <div class="card-header pb-2 d-flex justify-content-between align-items-center" style="margin-right:1.6rem">
+                                      <h5>liste des entrées et sorties</h5>
+                                      <a href="{{route('finances.create')}}" class="btn btn-primary btn-air-primary" type="button"><i class="fas fa-plus"></i><span class="ms-2">Ajouter</span></a>
+
+                                    </div>
+                                    <div class="card-body">
+                                      <div class="user-status table-responsive">
+                                        <table class="table table-bordernone">
+                                          <thead>
+                                            <tr>
+                                              <th scope="col">Titre </th>
+                                              <th scope="col">Description </th>
+                                              <th scope="col">Montant</th>
+                                              <th scope="col">Type </th>
+                                              <th scope="col">Date </th>
+
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            @each((finance, index) in finances)
+                                            <tr>
+                                              <td>{{finance.title}}</td>
+
+                                              <td>{{finance.description}}</td>
+
+                                              <td>{{finance.amount}}</td>
+
+                                              <td>
+                                                {{finance.typeFinance}}
+                                              </td>
+                                              <td class="f-w-600">
+                                                {{finance.createdAt.toLocaleString('fr-FR', {  year: 'numeric', month: 'numeric', day: 'numeric' })}}
+                                              </td>
+
+                                            </tr>
+                                            @end
+
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                      <div class="code-box-copy">
+                                        <button class="code-box-copy__btn btn-clipboard" data-clipboard-target="#products-cart" title="Copy"><i class="icofont icofont-copy-alt"></i></button>
+                                        <pre><code class="language-html" id="products-cart">&lt;div class="card"&gt;
+                        &lt;div class="card-header pb-0 d-flex justify-content-between align-items-center"&gt;
+                            &lt;h5&gt;PRODUCTS CART&lt;/h5&gt;
+                            &lt;div class="setting-list"&gt;
+                            &lt;ul class="list-unstyled setting-option"&gt;
+                                &lt;li&gt;
+                                &lt;div class="setting-primary"&gt;&lt;i class="icon-settings"&gt;&lt;/i&gt;&lt;/div&gt;
+                                &lt;/li&gt;
+                                &lt;li&gt;&lt;i class="view-html fa fa-code font-primary"&gt;&lt;/i&gt;&lt;/li&gt;
+                                &lt;li&gt;&lt;i class="icofont icofont-maximize full-card font-primary"&gt;&lt;/i&gt;&lt;/li&gt;
+                                &lt;li&gt;&lt;i class="icofont icofont-minus minimize-card font-primary"&gt;&lt;/i&gt;&lt;/li&gt;
+                                &lt;li&gt;&lt;i class="icofont icofont-refresh reload-card font-primary"&gt;&lt;/i&gt;&lt;/li&gt;
+                                &lt;li&gt;&lt;i class="icofont icofont-error close-card font-primary"&gt;&lt;/i&gt;&lt;/li&gt;
+                            &lt;/ul&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+                        &lt;div class="card-body"&gt;
+                            &lt;div class="user-status table-responsive"&gt;
+                            &lt;table class="table table-bordernone"&gt;
+                                &lt;thead&gt;
+                                &lt;tr&gt;
+                                    &lt;th scope="col"&gt;Details&lt;/th&gt;
+                                    &lt;th scope="col"&gt;Quantity&lt;/th&gt;
+                                    &lt;th scope="col"&gt;Status&lt;/th&gt;
+                                    &lt;th scope="col"&gt;Price&lt;/th&gt;
+                                &lt;/tr&gt;
+                                &lt;/thead&gt;
+                                &lt;tbody&gt;
+                                &lt;tr&gt;
+                                    &lt;td class="f-w-600"&gt;Simply dummy text of the printing&lt;/td&gt;
+                                    &lt;td&gt;1&lt;/td&gt;
+                                    &lt;td class="font-primary"&gt;Pending&lt;/td&gt;
+                                    &lt;td&gt;
+                                    &lt;div class="span badge rounded-pill pill-badge-secondary"&gt;6523&lt;/div&gt;
+                                    &lt;/td&gt;
+                                &lt;/tr&gt;
+                                &lt;tr&gt;
+                                    &lt;td class="f-w-600"&gt;Long established&lt;/td&gt;
+                                    &lt;td&gt;5&lt;/td&gt;
+                                    &lt;td class="font-secondary"&gt;Cancle&lt;/td&gt;
+                                    &lt;td&gt;
+                                    &lt;div class="span badge rounded-pill pill-badge-success"&gt;6523&lt;/div&gt;
+                                    &lt;/td&gt;
+                                &lt;/tr&gt;
+                                &lt;tr&gt;
+                                    &lt;td class="f-w-600"&gt;sometimes by accident&lt;/td&gt;
+                                    &lt;td&gt;10&lt;/td&gt;
+                                    &lt;td class="font-secondary"&gt;Cancle&lt;/td&gt;
+                                    &lt;td&gt;
+                                    &lt;div class="span badge rounded-pill pill-badge-warning"&gt;6523&lt;/div&gt;
+                                    &lt;/td&gt;
+                                &lt;/tr&gt;
+                                &lt;tr&gt;
+                                    &lt;td class="f-w-600"&gt;Classical Latin literature&lt;/td&gt;
+                                    &lt;td&gt;9&lt;/td&gt;
+                                    &lt;td class="font-primary"&gt;Return&lt;/td&gt;
+                                    &lt;td&gt;
+                                    &lt;div class="span badge rounded-pill pill-badge-primary"&gt;6523&lt;/div&gt;
+                                    &lt;/td&gt;
+                                &lt;/tr&gt;
+                                &lt;tr&gt;
+                                    &lt;td class="f-w-600"&gt;keep the site on the Internet&lt;/td&gt;
+                                    &lt;td&gt;8&lt;/td&gt;
+                                    &lt;td class="font-primary"&gt;Pending&lt;/td&gt;
+                                    &lt;td&gt;
+                                        &lt;div class="span badge rounded-pill pill-badge-danger"&gt;6523&lt;/div&gt;
+                                    &lt;/td&gt;
+                                &lt;/tr&gt;
+                                &lt;tr&gt;
+                                    &lt;td class="f-w-600"&gt;Molestiae consequatur&lt;/td&gt;
+                                    &lt;td&gt;3&lt;/td&gt;
+                                    &lt;td class="font-secondary"&gt;Cancle&lt;/td&gt;
+                                    &lt;td&gt;
+                                        &lt;div class="span badge rounded-pill pill-badge-info"&gt;6523&lt;/div&gt;
+                                    &lt;/td&gt;
+                                &lt;/tr&gt;
+                                &lt;tr&gt;
+                                    &lt;td class="f-w-600"&gt;Pain can procure&lt;/td&gt;
+                                    &lt;td&gt;8&lt;/td&gt;
+                                    &lt;td class="font-primary"&gt;Return&lt;/td&gt;
+                                    &lt;td&gt;
+                                    &lt;div class="span badge rounded-pill pill-badge-primary"&gt;6523&lt;/div&gt;
+                                    &lt;/td&gt;
+                                &lt;/tr&gt;
+                                &lt;/tbody&gt;
+                            &lt;/table&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+                        &lt;/div&gt;</code></pre>
+                                      </div>
+                                    </div>
+                                  </div>
+                          </div>
+                        </div>
+                      </div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+          </div>
+
+        </div>
+
+        @include('dashboard/partials/_footer')
+
+    </div>
+</div>
+
+@include('dashboard/partials/_script')
+@!component('components/notify', {
+    title: 'Chargement des entrées-sorties',
+    defaultNotify: 'true',
+    message: finances.length == 0 ? 'Aucune entrée et sorties trouvé' : 'Chargement de la liste des entrées et sorties réussie',
+  })
+
+
+<script>
+    const entrees = '{{financesTotal[0]}}'
+    const sorties = '{{financesTotal[1]}}'
+    var grapheTotal = new ApexCharts(document.querySelector('#depense-piechart'),
+{
+    chart: {
+      width: 300,
+      type: 'donut',
+    },
+    dataLabels: {
+      enabled: false
+    },
+    labels: ['Entrées', 'Sorties'],
+    series: [parseInt(entrees), parseInt(sorties)],
+    responsive: [
+    {
+      breakpoint: 480,
+      options: {
+        chart: {
+          width: 200,
+        },
+      legend: {
+        position: 'bottom',
+      },
+      },
+    },
+    ],
+    colors: [vihoAdminConfig.primary, vihoAdminConfig.secondary],
+}
+)
+
+    grapheTotal.render()
+</script>
+@endsection

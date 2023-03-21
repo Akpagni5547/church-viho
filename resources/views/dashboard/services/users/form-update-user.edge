@@ -1,0 +1,108 @@
+@layout('dashboard/app')
+@section('content')
+@include('dashboard/partials/_head')
+
+@include('dashboard/partials/_loader')
+
+<div class="page-wrapper" id="pageWrapper">
+
+@include('dashboard/partials/_header')
+
+<div class="page-body-wrapper horizontal-menu">
+
+@include('dashboard/partials/_sidebar')
+
+<div class="page-body">
+    <div class="container-fluid">
+      <div class="page-header">
+        <div class="row">
+          <div class="col-sm-6 mt-4">
+            <h3>Application sociale</h3>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{{ route('users.index') }}">Liste utilisateur</a></li>
+              <li class="breadcrumb-item active">modification utilisateur</li>
+            </ol>
+          </div>
+          <div class="card">
+            <div class="card-header pb-0">
+              <h5>Modifier l'utilisateur</h5>
+            </div>
+            <form class="form theme-form"  action="{{
+                route('users.update', { id: user.id }, {
+                  qs: {
+                    _method: 'PATCH'
+                  }
+                })
+              }}"
+              method="POST"
+             enctype="multipart/form-data">
+              {{ csrfField() }}
+              <div class="card-body">
+                <div class="row">
+                  <div class="col">
+
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">Nom</label>
+                        <div class="col-sm-9">
+                          <input class="form-control {{flashMessages.get('errors.first_name') ? 'danger' : ''}}" type="text" name="first_name" value="{{ flashMessages.get('first_name') || user.first_name }}"  placeholder="Entrez un nom">
+                          @if(flashMessages.has('errors.first_name'))
+                            <span class="text-danger">{{ flashMessages.get('errors.first_name') }}</span>
+                          @endif
+                        </div>
+                      </div>
+
+                      <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">Prénoms</label>
+                        <div class="col-sm-9">
+                          <input class="form-control" type="text" name="last_name" placeholder="Entrez un prénom" value="{{ flashMessages.get('last_name') || user.last_name }}">
+                          @if(flashMessages.has('errors.last_name'))
+                          <span class="text-danger">{{ flashMessages.get('errors.last_name') }}</span>
+                        @endif
+                        </div>
+                      </div>
+
+                      <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">Contact</label>
+                        <div class="col-sm-9">
+                          <input class="form-control" value="{{ flashMessages.get('phone') || user.phone }}" type="tel" name="phone" placeholder="Entrez un contact">
+                          @if(flashMessages.has('errors.phone'))
+                          <span class="text-danger">{{ flashMessages.get('errors.phone') }}</span>
+                        @endif
+                        </div>
+                      </div>
+
+
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">Rôle utilisateur</label>
+                        <div class="col-sm-9">
+                          <select class="form-control" name="role"  placeholder="sélectionnez un rôle" required>
+                            <option value="Administrateur" {{ user.role == "Administrateur" ? 'selected' : ''}}>Administrateur</option>
+                            <option value="Utilisateur" {{ user.role == "Utilisateur" ? 'selected' : ''}}>Utilisateur</option>
+
+                          </select>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+
+        <div class="card-footer text-end">
+          <div class="col-sm-9 offset-sm-3">
+            <button class="btn btn-primary" type="submit">Modifier</button>
+            <button type="button" class="btn btn-light" onclick="window.history.back();">Annuler</button>
+          </div>
+        </div>
+        </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+@include('dashboard/partials/_footer')
+</div>
+</div>
+
+
+@include('dashboard/partials/_script')
+@endsection

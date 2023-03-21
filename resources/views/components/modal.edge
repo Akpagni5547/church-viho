@@ -1,0 +1,33 @@
+<div class="card-body btn-showcase">
+  <!-- Simple demo-->
+  <div class="modal fade" id="{{modalId}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fs-3 fw-bold" id="exampleModalLabel" style="color:red">{{titleModal}} </h5>
+          <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body d-flex fs-4 justify-content-center">
+           {{messageBody}}
+          </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" type="button" data-bs-dismiss="modal">{{boutonLeft}}</button>
+            @if(id)
+            <a id={{id}}
+            class="btn btn-danger"
+            >
+              {{boutonRight}}
+            </a>
+            @else
+            <a
+            class="btn btn-danger"
+            href="{{route(routeName, JSON.parse(routeParams))}}" >
+              {{boutonRight}}
+            </a>
+            @endif
+        </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

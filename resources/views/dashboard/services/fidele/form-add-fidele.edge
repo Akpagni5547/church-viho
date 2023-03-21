@@ -1,0 +1,174 @@
+@layout('dashboard/app')
+@section('content')
+@include('dashboard/partials/_head')
+
+@include('dashboard/partials/_loader')
+
+<div class="page-wrapper" id="pageWrapper">
+
+@include('dashboard/partials/_header')
+
+<div class="page-body-wrapper horizontal-menu">
+
+@include('dashboard/partials/_sidebar')
+
+<div class="page-body">
+    <div class="container-fluid">
+      <div class="page-header">
+        <div class="row">
+          <div class="col-sm-6 mt-4">
+            <h3>Application sociale</h3>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{{ route('fideles.index') }}">Liste fidèles</a></li>
+              <li class="breadcrumb-item active">création fidèle</li>
+            </ol>
+          </div>
+          <div class="card">
+            <div class="card-header pb-0">
+              <h5>Ajouter un fidèle</h5>
+            </div>
+            <form class="form theme-form" action="{{route('fideles.store') }}" method="POST" enctype="multipart/form-data">
+              {{ csrfField() }}
+              <div class="card-body">
+                <div class="row">
+                  <div class="col">
+
+                    <div class="mb-3 row">
+                      <label class="col-sm-3 col-form-label">Nom</label>
+                      <div class="col-sm-9">
+                        <input class="form-control {{flashMessages.get('errors.first_name') ? 'danger' : ''}}" type="text" name="first_name" value="{{ flashMessages.get('first_name') || '' }}"  placeholder="Entrez un nom">
+                        @if(flashMessages.has('errors.first_name'))
+                          <span class="text-danger">{{ flashMessages.get('errors.first_name') }}</span>
+                        @endif
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label class="col-sm-3 col-form-label">Prénoms</label>
+                      <div class="col-sm-9">
+                        <input class="form-control" type="text" name="last_name" value="{{ flashMessages.get('last_name') || '' }}" placeholder="Entrez un prénom">
+                        @if(flashMessages.has('errors.last_name'))
+                          <span class="text-danger">{{ flashMessages.get('errors.last_name') }}</span>
+                        @endif
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label class="col-sm-3 col-form-label">Contact</label>
+                      <div class="col-sm-9">
+                        <input class="form-control" value="{{ flashMessages.get('phone') || '' }}" type="tel" name="phone" placeholder="Entrez un contact">
+                        @if(flashMessages.has('errors.phone'))
+                        <span class="text-danger">{{ flashMessages.get('errors.phone') }}</span>
+                      @endif
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">Fonction</label>
+                        <div class="col-sm-9">
+                          <input class="form-control" type="text" name="fonction" value="{{ flashMessages.get('fonction') || '' }}" placeholder="Entrez la fonction">
+                          @if(flashMessages.has('errors.fonction'))
+                            <span class="text-danger">{{ flashMessages.get('errors.fonction') }}</span>
+                          @endif
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">Groupement</label>
+                        <div class="col-sm-9">
+                          <input class="form-control" type="text" name="groupement" value="{{ flashMessages.get('groupement') || '' }}" placeholder="Entrez le groupement">
+                          @if(flashMessages.has('errors.groupement'))
+                            <span class="text-danger">{{ flashMessages.get('errors.groupement') }}</span>
+                          @endif
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">Lieu d'habitation</label>
+                        <div class="col-sm-9">
+                          <input class="form-control" type="text" name="lieu_habitation" value="{{ flashMessages.get('lieu_habitation') || '' }}" placeholder="Entrez le lieu d'habitation">
+                          @if(flashMessages.has('errors.lieu_habitation'))
+                            <span class="text-danger">{{ flashMessages.get('errors.lieu_habitation') }}</span>
+                          @endif
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">Status</label>
+                        <div class="col-sm-9">
+                          <input class="form-control" type="text" name="status" value="{{ flashMessages.get('status') || '' }}" placeholder="Entrez le status">
+                          @if(flashMessages.has('errors.status'))
+                            <span class="text-danger">{{ flashMessages.get('errors.status') }}</span>
+                          @endif
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">Date de naissance</label>
+                        <div class="col-sm-9">
+                          <input class="form-control digits" name="date_of_birth" type="date" value="{{ flashMessages.get('date_of_birth') || '' }}" >
+                          @if(flashMessages.has('errors.date_of_birth'))
+                          <span class="text-danger">{{ flashMessages.get('errors.date_of_birth') }}</span>
+                        @endif
+                        </div>
+                      </div>
+
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">Est baptisé?</label>
+                        <div class="col-sm-9">
+                          <select class="form-control" name="is_baptise"  placeholder="sélectionnez une valeur" required>
+                            <option selected>Sélectionnez une valeur</option>
+                            <option value="true">Oui</option>
+                            <option value="false">Non</option>
+                          </select>
+                          @if(flashMessages.has('errors.is_baptise'))
+                          <span class="text-danger">{{ flashMessages.get('errors.is_baptise') }}</span>
+                        @endif
+                        </div>
+                    </div>
+
+
+                    <div class="mb-3 row">
+                      <label class="col-sm-3 col-form-label">Categories</label>
+                      <div class="col-sm-9">
+                        <select class="form-control" name="categories"  placeholder="sélectionnez une categorie" required>
+                          <option selected>Sélectionnez une categorie</option>
+                          <option value="Homme">Homme</option>
+                          <option value="Femme">Femme</option>
+                          <option value="Jeune">Jeune</option>
+                          <option value="Enfant">Enfant</option>
+                        </select>
+                        @if(flashMessages.has('errors.categories'))
+                        <span class="text-danger">{{ flashMessages.get('errors.categories') }}</span>
+                      @endif
+                      </div>
+                    </div>
+
+
+                  </div>
+                </div>
+              </div>
+
+
+
+        <div class="card-footer text-end">
+          <div class="col-sm-9 offset-sm-3">
+            <button class="btn btn-primary" type="submit">Sauvegarder</button>
+            <button type="button" class="btn btn-light" onclick="window.history.back();">Annuler</button>
+          </div>
+        </div>
+
+        </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+@include('dashboard/partials/_footer')
+</div>
+</div>
+
+
+@include('dashboard/partials/_script')
+@endsection

@@ -1,0 +1,106 @@
+@layout('dashboard/app')
+@section('content')
+@include('dashboard/partials/_head')
+
+@include('dashboard/partials/_loader')
+
+<div class="page-wrapper" id="pageWrapper">
+
+@include('dashboard/partials/_header')
+
+<div class="page-body-wrapper horizontal-menu">
+
+@include('dashboard/partials/_sidebar')
+
+<div class="page-body">
+    <div class="container-fluid">
+      <div class="page-header">
+        <div class="row">
+          <div class="col-sm-6 mt-4">
+            <h3>Gestion des entrées-sorties</h3>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{{ route('fideles.index') }}">Liste des entrees-sorties</a></li>
+              <li class="breadcrumb-item active">Ajout d'une entrée-sortie</li>
+            </ol>
+          </div>
+          <div class="card">
+            <div class="card-header pb-0">
+              <h5>Ajouter une entrée-sortie</h5>
+            </div>
+            <form class="form theme-form" action="{{route('finances.store') }}" method="POST" enctype="multipart/form-data">
+              {{ csrfField() }}
+              <div class="card-body">
+                <div class="row">
+                  <div class="col">
+
+                    <div class="mb-3 row">
+                      <label class="col-sm-3 col-form-label">Titre</label>
+                      <div class="col-sm-9">
+                        <input class="form-control {{flashMessages.get('errors.title') ? 'danger' : ''}}" type="text" name="title" value="{{ flashMessages.get('title') || '' }}"  placeholder="Entrez un titre">
+                        @if(flashMessages.has('errors.title'))
+                          <span class="text-danger">{{ flashMessages.get('errors.title') }}</span>
+                        @endif
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label class="col-sm-3 col-form-label">Description</label>
+                      <div class="col-sm-9">
+                        <input class="form-control" type="text" name="description" value="{{ flashMessages.get('description') || '' }}" placeholder="Entrez une description">
+                        @if(flashMessages.has('errors.description'))
+                          <span class="text-danger">{{ flashMessages.get('errors.description') }}</span>
+                        @endif
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">Montant</label>
+                        <div class="col-sm-9">
+                          <input class="form-control" type="number" name="amount" value="{{ flashMessages.get('amount') || '' }}" placeholder="Entrez un montant">
+                          @if(flashMessages.has('errors.amount'))
+                            <span class="text-danger">{{ flashMessages.get('errors.amount') }}</span>
+                          @endif
+                        </div>
+                      </div>
+
+
+
+                    <div class="mb-3 row">
+                      <label class="col-sm-3 col-form-label">Type d'entrée-sortie</label>
+                      <div class="col-sm-9">
+                        <select class="form-control" name="type_finance"  placeholder="sélectionnez un type" required>
+                          <option selected>Sélectionnez un type</option>
+                          <option value="Entrees">Entrées</option>
+                          <option value="Sortie">Sorties</option>
+                        </select>
+                        @if(flashMessages.has('errors.type_finance'))
+                        <span class="text-danger">{{ flashMessages.get('errors.type_finance') }}</span>
+                      @endif
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+        <div class="card-footer text-end">
+          <div class="col-sm-9 offset-sm-3">
+            <button class="btn btn-primary" type="submit">Sauvegarder</button>
+            <button type="button" class="btn btn-light" onclick="window.history.back();">Annuler</button>
+          </div>
+        </div>
+
+        </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+@include('dashboard/partials/_footer')
+</div>
+</div>
+
+
+@include('dashboard/partials/_script')
+@endsection

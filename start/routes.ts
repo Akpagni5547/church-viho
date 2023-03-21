@@ -32,6 +32,19 @@ Route.group(() => {
 Route.group(() => {
   Route.get('/dashboard', 'DashboardController.index').as('dashboard')
   Route.get('/logout', 'AuthController.logout').as('auth.logout')
+  Route.get('/make-present/:id', 'ListCallsController.makePresent').as('fideles.present')
+  Route.get('/make-absent/:id', 'ListCallsController.makeAbsent').as('fideles.absent')
+  Route.get('users/delete/:id', 'UsersController.destroy').as('users.destroy')
+  Route.get('fideles/delete/:id', 'FidelesController.destroy').as('fideles.destroy')
+  Route.resource('/users', 'UsersController')
+    .only(['index', 'store', 'update', 'create', 'edit'])
+    .as('users')
+  Route.resource('/fideles', 'FidelesController')
+    .only(['index', 'store', 'update', 'create', 'edit', 'show'])
+    .as('fideles')
+  Route.resource('/finances', 'FinancesController')
+    .only(['index', 'store', 'create'])
+    .as('finances')
 }).middleware('auth')
 
 Route.get('/server-error', async ({ view }) => {

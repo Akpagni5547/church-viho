@@ -1,0 +1,270 @@
+@layout('dashboard/app')
+@section('content')
+@include('dashboard/partials/_head')
+
+@include('dashboard/partials/_loader')
+
+<div class="page-wrapper" id="pageWrapper">
+
+@include('dashboard/partials/_header')
+
+<div class="page-body-wrapper horizontal-menu">
+
+@include('dashboard/partials/_sidebar')
+
+<div class="page-body">
+    <div class="container-fluid">
+        <div class="page-header">
+          <div class="row">
+            <div class="col-sm-6 mt-4">
+              <h3 class="text-transform-none">Gestion des locataires</h3>
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Tableau de bord</a></li>
+                <li class="breadcrumb-item active">Liste des fideles</li>
+              </ol>
+            </div>
+            <div class="col-sm-6"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body btn-showcase">
+        <div class="modal fade" id="delete-fidele-modal" tabindex="-1" role="dialog" aria-labelledby="modalDeleteFidele" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title fs-3 fw-bold" id="modalDeleteFidele" style="color:red">Attention </h5>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body fs-4 d-flex justify-content-center ">Etes-vous sûr de vouloir supprimer ce fidèle ?</div>
+                  <div class="modal-footer">
+                    <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Non</button>
+                      <a
+                      class="btn btn-danger"
+                       href="#"
+                       id="delete-fidele"
+                        style="color:white">
+                        Oui
+                      </a>
+                  </div>
+                </div>
+              </div>
+        </div>
+    </div>
+
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-12 col-xl-12 box-col-6 des-xl-100">
+            <div>
+              <div class="row">
+                <div class="col-sm-12 col-xl-8 box-col-8">
+                  <div class="card mb-0">
+                    <div class="card-header">
+                      <div class="row">
+                        <div class="col-9"><h5>Liste des fideles</h5></div>
+                        <div class="col-3">
+                          <span class="pull-right f-14 mt-0 me-2">
+                            <a  href="{{route('fideles.create')}}" class="btn btn-primary btn-air-primary " type="button"><i class="fas fa-plus"></i><span class="ms-2">Ajouter</span></a>
+                         </span>
+                        </div>
+                      </div>
+
+                    </div>
+                    <div class="card-body">
+                      <div class="table-responsive">
+                        <table class="display" id="basic-1">
+                          <thead>
+                            <tr>
+                              <th>Nom et prénoms</th>
+                               <th>Groupement</th>
+                               <th>Status</th>
+                               <th>Est baptisé ?</th>
+                               <th>Categories</th>
+                               <th>Actions</th>
+                               <th>Presence / Absence</th>
+
+                            </tr>
+                          </thead>
+                          <tbody>
+                            @each((fidele, index) in fideles)
+                            <tr>
+                              <td> {{fidele.first_name}} {{fidele.last_name}} <br> Fonction:<b>  {{fidele.fonction}} </b>  </td>
+                              <td>{{fidele.groupement}}</td>
+                              <td>{{fidele.status}}</td>
+                              <td>{{fidele.is_baptise ? 'Oui' : 'Non'}}</td>
+                              <td>{{fidele.categories}}</td>
+                              <td>
+                                <div style="display: flex; flex-direction: column; align-items: flex-start; ">
+                                  <div class="mb-2">
+                                    <a href="{{route('fideles.edit', {id: fidele.id})}}" class="btn btn-outline-primary btn-xs" style="padding-right:8px;padding-left:8px;display:inline-flex;">
+                                      <i data-feather="edit-2" style="width:15" class="me-1"></i>
+                                      <span style="font-size:small"> Editer</span></a>
+                                </div>
+                                <div>
+                                  <a href="#" class="btn btn-outline-primary btn-xs active-modal-delete-fidele" id="fidele-list-{{fidele.id}}"  data-bs-toggle="modal" data-original-title="test" data-bs-target="#delete-fidele-modal" style="padding-right:8px;padding-left:8px;display:inline-flex;"><span style="font-size:small"> Supprimer</span></a>
+                                </div>
+                                </div>
+
+                              </td>
+
+                              <td>
+                                @if (fidele.listCalled.length > 0)
+                                {{fidele.listCalled[0].status}}
+                                @else
+                                <div style="display: flex; flex-direction: column; align-items: flex-start; ">
+                                  <div class="mb-2">
+                                    <a href="{{route('fideles.present', {id: fidele.id})}}" class="btn btn-outline-primary btn-xs" style="padding-right:8px;padding-left:8px;display:inline-flex;"><span style="font-size:small"> Présent</span></a>
+                                </div>
+                                <div>
+                                  <a href="{{route('fideles.absent', {id: fidele.id})}}" class="btn btn-outline-primary btn-xs" style="padding-right:8px;padding-left:8px;display:inline-flex;"><span style="font-size:small"> Absent</span></a>
+                                </div>
+                                </div>
+                                @end
+                              </td>
+                              {{--  <td>{{locataire.number_piece}} <br> <b> {{locataire.type_piece  }} </b> </td>
+
+
+                              <td><a href="{{route('locataires.edit', {id: locataire.id})}}" class="btn btn-outline-primary btn-xs" style="padding-right:8px;padding-left:8px;display:inline-flex;"><i data-feather="edit-2" style="vertical-align: middle; width:20" class="me-1"></i><span style="font-size:small"> editer</span></a></td>  --}}
+                            </tr>
+                            @end
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div  class="col-sm-12 col-xl-4 box-col-6">
+
+                  <div class="bg-primary b-r-4 card-body">
+                    <div class="media static-top-widget">
+                      <div class="align-self-center text-center"><i data-feather="user-plus"></i></div>
+                      <div class="media-body"><span class="m-0">Total fideles</span>
+                        <h4 class="mb-0 counter">{{totalFidele}}</h4><i class="icon-bg" data-feather="user-plus"></i>
+                      </div>
+                    </div>
+                  </div>
+
+
+            <div class="card social-widget-card mt-4">
+              <div class="card-body">
+                <div class="d-flex justify-content-start">
+                <div class="card-body apex-chart">
+                  <div id="piecharts"></div>
+                </div>
+                </div>
+                <h5 class="b-b-light">Total Baptisé ou non baptisé</h5>
+                <div class="row">
+                  <div class="col text-center b-r-light"><span>Baptisé</span>
+                    <h4 class="counter mb-0">{{totalBaptise}}</h4>
+                  </div>
+                  <div class="col text-center"><span>Non baptisé</span>
+                    <h4 class="counter mb-0">{{totalNonBaptise}}</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header pb-0">
+                <h5>Categories fideles </h5>
+              </div>
+              <div class="card-body apex-chart">
+                <div id="piechart"></div>
+              </div>
+            </div>
+          </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+</div>
+
+@include('dashboard/partials/_footer')
+</div>
+</div>
+
+
+@include('dashboard/partials/_script')
+@!component('components/notify', {
+    title: 'Chargement des fideles',
+    defaultNotify: 'true',
+    message: fideles.length == 0 ? 'Aucun fidele trouvé' : 'Chargement de la liste des fideles réussie',
+  })
+
+<script>
+  var options8 = {
+chart: {
+width: 380,
+type: 'pie',
+},
+labels: ['Homme', 'Femme', 'Jeune', 'Enfant'],
+series: [{{fideles.filter((fidele) => {
+  return fidele.categories === 'Homme'
+}).length}}, {{fideles.filter((fidele) => {
+  return fidele.categories === 'Femme'
+}).length}}, {{fideles.filter((fidele) => {
+  return fidele.categories === 'Jeune'
+}).length}}, {{fideles.filter((fidele) => {
+  return fidele.categories === 'Enfant'
+}).length}}],
+responsive: [
+{
+  breakpoint: 480,
+  options: {
+    chart: {
+      width: 200,
+    },
+    legend: {
+      position: 'bottom',
+    },
+  },
+},
+],
+colors: [vihoAdminConfig.primary, vihoAdminConfig.secondary,'#3f51b5', '#ff9800'],
+}
+
+var chart8 = new ApexCharts(document.querySelector('#piechart'), options8)
+var chart9 = new ApexCharts(document.querySelector('#piecharts'), {
+
+chart: {
+width: 300,
+type: 'donut',
+},
+dataLabels: {
+enabled: false
+},
+labels: ['Baptisé', 'Non baptisé'],
+series: [{{totalBaptise}},{{totalNonBaptise}}],
+responsive: [
+{
+  breakpoint: 480,
+  options: {
+    chart: {
+      width: 200,
+    },
+    legend: {
+      position: 'bottom',
+    },
+  },
+},
+],
+colors: ['#36a2eb', "#ff6384"],
+})
+
+chart8.render()
+chart9.render()
+
+$('.active-modal-delete-fidele').click(function(){
+    let idFidele=$(this).attr('id');
+    let arrayIdDom = idFidele.split('-');
+    let fideleId = arrayIdDom.pop();
+    $('#delete-fidele').attr('href', "{{route('fideles.destroy', {id: 'fideleId'})}}".replace('fideleId', fideleId));
+  });
+
+
+</script>
+@endsection
