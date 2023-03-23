@@ -1,0 +1,283 @@
+@layout('dashboard/app')
+@section('content')
+
+@include('dashboard/partials/_head')
+
+@include('dashboard/partials/_loader')
+
+ <!-- Loader ends-->
+  <!-- page-wrapper Start-->
+  <div class="page-wrapper" id="pageWrapper">
+
+    <!-- Page Header Start-->
+    @include('dashboard/partials/_header')
+    <!-- Page Header Ends-->
+
+  <!-- Page Body Start-->
+    <div class="page-body-wrapper horizontal-menu">
+      <!-- Page Sidebar Start-->
+      @include('dashboard/partials/_sidebar')
+      <!-- Page Sidebar Ends-->
+      <div class="page-body">
+        <div class="container-fluid">
+          <div class="page-header">
+            <div class="row">
+              <div class="col-sm-6 mt-4">
+                <h3>Gestion du profils</h3>
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Tableau de bord</a></li>
+                  <li class="breadcrumb-item active">Profils</li>
+                </ol>
+              </div>
+              <div class="col-sm-6"></div>
+            </div>
+          </div>
+        </div>
+        <div class="email-wrap bookmark-wrap">
+          <div class="row">
+            <div class="col-xl-3 box-col-4 xl-30">
+              <div class="email-sidebar"><a class="btn btn-primary email-aside-toggle" href="javascript:void(0)">bookmark filter</a>
+                <div class="email-left-aside">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="email-app-sidebar left-bookmark">
+
+                        <br/>
+                        <ul class="nav main-menu" role="tablist">
+
+                          <li class="nav-item"><span class="main-title">Informations</span></li>
+                          <li>
+                            <a id="pills-created-tab" data-bs-toggle="pill" href="#pills-created" role="tab" aria-controls="pills-created" aria-selected="{{showpassword == false ? "true" : "false" }}">
+                              <span class="title">Informations personnelles</span>
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                            {{--  class="show"  --}}
+                             id="pills-todaytask-tab" data-bs-toggle="pill" href="#pills-todaytask" role="tab" aria-controls="pills-todaytask" aria-selected="{{showpassword == false ? "false" : "true" }}">
+                              <span class="title">Sécurité</span>
+                            </a>
+                          </li>
+
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-9 col-md-12 box-col-8 xl-70">
+              <div class="email-right-aside bookmark-tabcontent">
+                <div class="card email-body radius-left">
+                  <div class="ps-0">
+                    <div class="tab-content">
+                      <div class="tab-pane fade {{showpassword == false ? "active show" : "" }}" id="pills-created" role="tabpanel" aria-labelledby="pills-created-tab">
+                        <div class="card mb-0">
+                          <div class="card-header">
+                            <h5 class="mb-0">Informations personnelles</h5>
+                          </div>
+                          <form class="form theme-form"  action="{{
+                            route('profils.update', { id: auth.user?.id }, {
+                              qs: {
+                                _method: 'PATCH'
+                              }
+                            })
+                          }}"
+                          method="POST"
+                         enctype="multipart/form-data">
+                            {{ csrfField() }}
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col">
+
+                                  <div class="mb-3 row">
+                                    <label class="col-sm-3 col-form-label">Nom</label>
+                                    <div class="col-sm-9">
+                                      <input class="form-control {{flashMessages.get('errors.first_name') ? 'danger' : ''}}" type="text" name="first_name" value="{{ flashMessages.get('first_name') || auth.user?.first_name }}"  placeholder="Entrez un nom">
+                                      @if(flashMessages.has('errors.first_name'))
+                                        <span class="text-danger">{{ flashMessages.get('errors.first_name') }}</span>
+                                      @endif
+                                    </div>
+                                  </div>
+
+                                  <div class="mb-3 row">
+                                    <label class="col-sm-3 col-form-label">Prénoms</label>
+                                    <div class="col-sm-9">
+                                      <input class="form-control" type="text" name="last_name" placeholder="Entrez un prénom" value="{{ flashMessages.get('last_name') || auth.user?.last_name }}">
+                                    </div>
+                                  </div>
+
+
+                                  <div class="mb-3 row">
+                                    <label class="col-sm-3 col-form-label">Telephone</label>
+                                    <div class="col-sm-9">
+                                      <input class="form-control digits" value="{{ flashMessages.get('phone') || auth.user?.phone }}"  name="phone" type="text" placeholder="Numéro de téléphone">
+                                    </div>
+                                  </div>
+
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer text-end">
+                              <div class="col-sm-9 offset-sm-3">
+                                <button class="btn btn-primary" type="submit">Sauvegarder</button>
+                                <input class="btn btn-light" type="reset" value="Annuler">
+                              </div>
+                            </div>
+                    </form>
+                        </div>
+                      </div>
+
+                      <div class="fade tab-pane {{showpassword == true || showpassword == null ? "active show" : "" }} " id="pills-todaytask" role="tabpanel" aria-labelledby="pills-todaytask-tab">
+                        <div class="card mb-0">
+                          <div class="card-header d-flex">
+                            <h6 class="mb-0">Sécurité</h6>
+                          </div>
+                          <form class="theme-form login-form" onsubmit="return checker()" action="{{route('updatePassword')}}" method="POST" >
+                            {{ csrfField() }}
+                            <h4 class="mb-3">Changer votre mot de passe</h4>
+                            @if(showpassword != true || msg)
+
+
+                            <div class="form-group">
+                              <label>Ancien mot de passe</label>
+                              <div class="input-group" id="show_hide_password"><span class="input-group-text"><i class="icon-lock"></i></span>
+                                <input class="form-control" type="password" name="currentPassword" required placeholder="*********" value = "">
+                                <span class="input-group-text">
+                                <a href="#">
+                                  <i class="fa fa-eye-slash old-password" aria-hidden="true"></i>
+                                </a>
+                                </span>
+                              </div>
+
+                              @if(msg)
+                                <span class="text-danger">{{ msg }}</span>
+                              @endif
+                            </div>
+                            @endif
+                            @if(showpassword == true)
+                            <div class="form-group">
+                              <label>Nouveau mot de passe</label>
+                              <div class="input-group" id="show_hide_password_new"><span class="input-group-text"><i class="icon-lock"></i></span>
+                                <input class="form-control" type="password" id="new-password" name="password" required placeholder="*********" value = "">
+                                <span class="input-group-text">
+                                  <a href="#">
+                                    <i class="fa fa-eye-slash new-password" aria-hidden="true"></i>
+                                  </a>
+                                  </span>
+                              </div>
+                              <span id = "message1" style="color:red"> </span>
+
+                            </div>
+                            <div class="form-group">
+                              <label>Confirmer mot de passe</label>
+                              <div class="input-group" id="show_hide_password_confirm"><span class="input-group-text"><i class="icon-lock"></i></span>
+                                <input class="form-control" type="password" id="confirm-password" name="password_confirmation" required placeholder="*********" value = "">
+                                <span class="input-group-text">
+                                  <a href="#">
+                                    <i class="fa fa-eye-slash new-password-confirm" aria-hidden="true"></i>
+                                  </a>
+                                  </span>
+                              </div>
+                              <span id = "message2" style="color:red"> </span>
+
+                            </div>
+                            @endif
+                            <div class="form-group">
+                              <button class="btn btn-primary btn-block" type="submit">Modifier</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Container-fluid starts-->
+      </div>
+
+
+
+      @include('dashboard/partials/_script')
+      @!component('components/notify', {
+        defaultNotify: showpassword == true ? 'true' : 'false',
+        title: 'Modification de mot de passe',
+        message: 'Le mot de passe que vous avez entré est correct, veuillez changer votre mot de passe'
+      })
+
+    <script >
+      $("#show_hide_password a").on('click', function(event) {
+        event.preventDefault();
+
+        if($('#show_hide_password input').attr("type") == "text"){
+            $('#show_hide_password input').attr('type', 'password');
+            $('#show_hide_password .old-password').addClass( "fa-eye-slash" );
+            $('#show_hide_password .old-password').removeClass( "fa-eye" );
+        }else if($('#show_hide_password input').attr("type") == "password"){
+            $('#show_hide_password input').attr('type', 'text');
+            $('#show_hide_password .old-password').removeClass( "fa-eye-slash" );
+            $('#show_hide_password .old-password').addClass( "fa-eye" );
+        }
+    });
+
+    $("#show_hide_password_new a").on('click', function(event) {
+        event.preventDefault();
+
+        if($('#show_hide_password_new input').attr("type") == "text"){
+            $('#show_hide_password_new input').attr('type', 'password');
+            $('#show_hide_password_new .new-password').addClass( "fa-eye-slash" );
+            $('#show_hide_password_new .new-password').removeClass( "fa-eye" );
+        }else if($('#show_hide_password_new input').attr("type") == "password"){
+            $('#show_hide_password_new input').attr('type', 'text');
+            $('#show_hide_password_new .new-password').removeClass( "fa-eye-slash" );
+            $('#show_hide_password_new .new-password').addClass( "fa-eye" );
+        }
+    });
+
+    $("#show_hide_password_confirm a").on('click', function(event) {
+        event.preventDefault();
+
+        if($('#show_hide_password_confirm input').attr("type") == "text"){
+            $('#show_hide_password_confirm input').attr('type', 'password');
+            $('#show_hide_password_confirm .new-password-confirm').addClass( "fa-eye-slash" );
+            $('#show_hide_password_confirm .new-password-confirm').removeClass( "fa-eye" );
+        }else if($('#show_hide_password_confirm input').attr("type") == "password"){
+            $('#show_hide_password_confirm input').attr('type', 'text');
+            $('#show_hide_password_confirm .new-password-confirm').removeClass( "fa-eye-slash" );
+            $('#show_hide_password_confirm .new-password-confirm').addClass( "fa-eye" );
+        }
+    });
+
+
+
+    function checker(){
+$('#message1').html('');
+$('#message2').html('');
+     let inputValue= document.getElementById("new-password").value;
+     let inputConfirm= document.getElementById("confirm-password").value;
+
+       //minimum password length validation
+      if(inputValue.length < 8) {
+        document.getElementById("message1").innerHTML = "**Le mot de passe doit être de 8 charactère au moins";
+        return false;
+      }
+    //check if both password are equal
+
+      if(inputValue != inputConfirm) {
+        document.getElementById("message2").innerHTML = "**Les mots de passes sont differents";
+        return false;
+      }
+    }
+
+
+
+
+
+
+    </script>
+      @include('dashboard/partials/_footer')
+
+  @endsection

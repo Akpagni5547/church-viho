@@ -45,6 +45,13 @@ Route.group(() => {
   Route.resource('/finances', 'FinancesController')
     .only(['index', 'store', 'create'])
     .as('finances')
+  Route.resource('/profils', 'ProfilsController')
+    .only(['index', 'update'])
+    .middleware({
+      '*': ['auth'],
+    })
+    .as('profils')
+  Route.post('/profils', 'ProfilsController.updatePassword').middleware('auth').as('updatePassword')
 }).middleware('auth')
 
 Route.get('/server-error', async ({ view }) => {
