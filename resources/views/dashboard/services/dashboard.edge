@@ -43,7 +43,7 @@
                 </div>
                 <div class="col-xl-6 col-xs-12 col-md-6 col-sm-6">
                   <div class="cal-datepicker">
-                    <div class="datepicker-here float-sm-end" data-language="fr">           </div>
+                    <div class="datepicker-here float-sm-end" data-language="en">           </div>
                   </div>
                 </div>
               </div>
@@ -51,16 +51,11 @@
           </div>
         </div>
 
-
-
-
-
         <div class="col-xl-5 box-col-12 des-xl-100">
           <div class="row">
             <div class="col-xl-12 col-md-6 box-col-6 des-xl-50">
               <div class="card">
                 <div class="mobile-clock-widget ">
-
                   <div>
                     <ul class="clock" id="clock">
                       <li class="hour" id="hour"></li>
@@ -68,28 +63,47 @@
                       <li class="sec" id="sec"></li>
                     </ul>
                     <div>
-                      <p class="m-0 f-14 text-light">Abidjan, Attinguié PK 27,         Côte d'Ivoire                                           </p>
+                      <p class="m-0 f-14 text-light">Abidjan, Côte d'Ivoire </p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-
-
           </div>
-
-
         </div>
 
         <div class="col-sm-12 col-xl-12">
           <div class="card">
             <div class="card-header d-flex justify-content-between">
-              <h5>Liste des annonnces</h5>
+              <h5>Liste des annonnces récentes</h5>
 
             </div>
             <div class="card-body">
-              <div class="row">
-        </div>
+              <div class="table-responsive">
+                <table class="display" id="basic-1">
+                  <thead>
+                    <tr>
+                      <th>Titre</th>
+                      <th>Description</th>
+                      <th>Lieu</th>
+                      <th>Date </th>
+                      <th>Statut</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @each((event, index) in events)
+                    <tr>
+                      <td>{{event.title}}</td>
+                      <td>{{event.description == null ? 'Aucune description' : event.description}}</td>
+                      <td>{{event.lieu}}</td>
+                      <td>{{event.eventDate.toLocaleString("fr-FR", {  year: 'numeric', month: 'numeric', day: 'numeric' }).split('/').reverse().join('-')}}</td>
+                      <td><span class="badge rounded-pill badge-{{event.status == 'Terminé' ? 'success' : event.status == 'Pas débuté' ? 'warning' : 'primary' }}">{{event.status}}</span></td>
+                    </tr>
+                    @end
+                  </tbody>
+                </table>
+              </div>
+            </div>
         </div>
         </div>
         </div>

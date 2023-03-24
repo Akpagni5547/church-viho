@@ -1,0 +1,120 @@
+@layout('dashboard/app')
+@section('content')
+@include('dashboard/partials/_head')
+
+@include('dashboard/partials/_loader')
+
+<div class="page-wrapper" id="pageWrapper">
+
+@include('dashboard/partials/_header')
+
+<div class="page-body-wrapper horizontal-menu">
+
+@include('dashboard/partials/_sidebar')
+
+<div class="page-body">
+    <div class="container-fluid">
+      <div class="page-header">
+        <div class="row">
+          <div class="col-sm-6 mt-4">
+            <h3>Application sociale</h3>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{{ route('fideles.index') }}">Liste fidèles</a></li>
+              <li class="breadcrumb-item active">modification fidèle</li>
+            </ol>
+          </div>
+          <div class="card">
+            <div class="card-header pb-0">
+              <h5>Modifier le fidèle</h5>
+            </div>
+            <form class="form theme-form" action="{{route('events.update', { id: event.id }, {
+                qs: {
+                  _method: 'PATCH'
+                }
+              }) }}" method="POST" enctype="multipart/form-data">
+              {{ csrfField() }}
+              <div class="card-body">
+                <div class="row">
+                  <div class="col">
+
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">Titre</label>
+                        <div class="col-sm-9">
+                          <input class="form-control {{flashMessages.get('errors.title') ? 'danger' : ''}}" type="text" name="title" value="{{ flashMessages.get('title') || event.title }}"  placeholder="Entrez un titre">
+                          @if(flashMessages.has('errors.title'))
+                            <span class="text-danger">{{ flashMessages.get('errors.title') }}</span>
+                          @endif
+                        </div>
+                      </div>
+
+                    <div class="mb-3 row">
+                      <label class="col-sm-3 col-form-label">Description</label>
+                      <div class="col-sm-9">
+                        <input class="form-control" type="text" name="description" value="{{ flashMessages.get('description') || event.description }}" placeholder="Entrez une description">
+                        @if(flashMessages.has('errors.description'))
+                          <span class="text-danger">{{ flashMessages.get('errors.description') }}</span>
+                        @endif
+                      </div>
+                    </div>
+
+
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">Lieu</label>
+                        <div class="col-sm-9">
+                          <input class="form-control" type="text" name="lieu" value="{{ flashMessages.get('lieu') || event.lieu }}" placeholder="Entrez le lieu">
+                          @if(flashMessages.has('errors.lieu'))
+                            <span class="text-danger">{{ flashMessages.get('errors.lieu') }}</span>
+                          @endif
+                        </div>
+                    </div>
+
+
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">Date</label>
+                        <div class="col-sm-9">
+                          <input class="form-control digits"  name="event_date"
+                          value="{{ flashMessages.get('event_date') || event.eventDate.toLocaleString("fr-FR", {  year: 'numeric', month: 'numeric', day: 'numeric' }).split('/').reverse().join('-') }}"
+                           type="date" >
+                        </div>
+                      </div>
+
+
+                    <div class="mb-3 row">
+                      <label class="col-sm-3 col-form-label">Statut</label>
+                      <div class="col-sm-9">
+                        <select class="form-control" name="status"  placeholder="sélectionnez un statut" required>
+                          <option selected>Sélectionnez un statut</option>
+                          <option value="En cours" {{ event.status == "En cours" ? 'selected' : ''}}>En cours</option>
+                          <option value="Terminé" {{ event.status == "Terminé" ? 'selected' : ''}}>Terminé</option>
+                          <option value="Pas débuté" {{ event.status == "Pas débuté" ? 'selected' : ''}}>Pas débuté</option>
+                        </select>
+                        @if(flashMessages.has('errors.status'))
+                        <span class="text-danger">{{ flashMessages.get('errors.status') }}</span>
+                      @endif
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+        <div class="card-footer text-end">
+          <div class="col-sm-9 offset-sm-3">
+            <button class="btn btn-primary" type="submit">Modifier</button>
+            <button type="button" class="btn btn-light" onclick="window.history.back();">Annuler</button>
+          </div>
+        </div>
+        </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+@include('dashboard/partials/_footer')
+</div>
+</div>
+
+
+@include('dashboard/partials/_script')
+@endsection

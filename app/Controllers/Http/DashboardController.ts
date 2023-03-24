@@ -1,19 +1,9 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Event from 'App/Models/Event'
 
 export default class DashboardController {
   public async index({ view }: HttpContextContract) {
-    return view.render('dashboard/services/dashboard')
+    const events = await Event.query().orderBy('id', 'desc').limit(10)
+    return view.render('dashboard/services/dashboard', { events })
   }
-
-  public async create({}: HttpContextContract) {}
-
-  public async store({}: HttpContextContract) {}
-
-  public async show({}: HttpContextContract) {}
-
-  public async edit({}: HttpContextContract) {}
-
-  public async update({}: HttpContextContract) {}
-
-  public async destroy({}: HttpContextContract) {}
 }

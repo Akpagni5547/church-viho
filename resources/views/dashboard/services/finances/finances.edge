@@ -72,7 +72,7 @@
                                     </div>
                                     <div class="card-body">
                                       <div class="user-status table-responsive">
-                                        <table class="table table-bordernone">
+                                        <table class="display" id="basic-1">
                                           <thead>
                                             <tr>
                                               <th scope="col">Titre </th>
@@ -80,28 +80,22 @@
                                               <th scope="col">Montant</th>
                                               <th scope="col">Type </th>
                                               <th scope="col">Date </th>
-
                                             </tr>
                                           </thead>
                                           <tbody>
                                             @each((finance, index) in finances)
                                             <tr>
                                               <td>{{finance.title}}</td>
-
                                               <td>{{finance.description}}</td>
-
                                               <td>{{finance.amount}}</td>
-
                                               <td>
                                                 {{finance.typeFinance}}
                                               </td>
                                               <td class="f-w-600">
                                                 {{finance.createdAt.toLocaleString('fr-FR', {  year: 'numeric', month: 'numeric', day: 'numeric' })}}
                                               </td>
-
                                             </tr>
                                             @end
-
                                           </tbody>
                                         </table>
                                       </div>

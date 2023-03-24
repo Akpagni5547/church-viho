@@ -1,0 +1,137 @@
+@layout('dashboard/app')
+@section('content')
+
+@include('dashboard/partials/_head')
+@include('dashboard/partials/_loader')
+
+ <!-- Loader ends-->
+  <!-- page-wrapper Start-->
+  <div class="page-wrapper" id="pageWrapper">
+
+    <!-- Page Header Start-->
+    @include('dashboard/partials/_header')
+    <!-- Page Header Ends-->
+
+  <!-- Page Body Start-->
+    <div class="page-body-wrapper horizontal-menu">
+      <!-- Page Sidebar Start-->
+      @include('dashboard/partials/_sidebar')
+      <!-- Page Sidebar Ends-->
+      <div class="page-body">
+        <div class="container-fluid">
+          <div class="page-header">
+            <div class="row">
+              <div class="col-sm-6 mt-4">
+                <h3>Gestion des évènements</h3>
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Tableau de bord</a></li>
+                  <li class="breadcrumb-item active">Liste évènements</li>
+                </ol>
+              </div>
+              <div class="col-sm-6"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+              <div class="row">
+                <div class="col-10"><h5>Liste des évènements</h5></div>
+                <div class="col" style="margin-left:0.7rem"> <a href="{{route('events.create')}}" class="btn btn-primary btn-air-primary" type="button"><i class="fas fa-plus"></i><span class="ms-2">Ajouter</span></a></div>
+            </div>
+            </div>
+            <!-- Vertically centered modal-->
+            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title fs-4  fw-3">Fiche évènement</h5>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <ul class="fs-4">
+                      <li class="titre"></li>
+                      <li class="description"></li>
+                      <li class="lieu"></li>
+                      <li class="date"></li>
+                      <li class="statut"></li>
+                      <li class="err"></li>
+                    </ul>
+                  </div>
+                  <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Fermer</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="display" id="basic-1">
+                  <thead>
+                    <tr>
+                      <th>Titre</th>
+                      <th>Description</th>
+                      <th>Lieu</th>
+                      <th>Date </th>
+                      <th>Statut</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @each((event, index) in events)
+                    <tr>
+                      <td><a  class="event-edit-show" id="event-{{event.id}}" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" style="cursor:pointer">{{event.title}}</a></td>
+                      <td>{{event.description == null ? 'Aucune description' : event.description}}</td>
+                      <td>{{event.lieu}}</td>
+                      <td>{{event.eventDate.toLocaleString("fr-FR", {  year: 'numeric', month: 'numeric', day: 'numeric' }).split('/').reverse().join('-')}}</td>
+                      <td><span class="badge rounded-pill badge-{{event.status == 'Terminé' ? 'success' : event.status == 'Pas débuté' ? 'warning' : 'primary' }}">{{event.status}}</span></td>
+                      <td><a href="{{route('events.edit', {id: event.id})}}" class="btn btn-outline-primary btn-xs" style="padding-right:8px;padding-left:8px;display:inline-flex;" type="button"><i data-feather="edit-2" style="vertical-align: middle; width:20" class="me-1"></i><span style="font-size:small"> editer</span></a></td>
+                    </tr>
+                    @end
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+      </div>
+      <!-- Container-fluid starts-->
+    </div>
+    @include('dashboard/partials/_footer')
+
+    @include('dashboard/partials/_script')
+
+    @!component('components/notify', {
+      title: 'Liste des évènements',
+      message: events.length == 0 ? "Aucune évènement n'a été effectué" : 'Chargement de toutes les évènements effectués avec succès',
+      loader:  true,
+    })
+
+    <script>
+
+      $('.event-edit-show').click(function(){
+          let event=$(this).attr('id');
+          let idEvent = event.split('-')[1];
+         $.ajax({
+            url: `events/${idEvent}`,
+            type: "get", //send it through get method
+            success: function(response) {
+              //Do Something
+              const convertStringToDate = new Date(response.event.event_date)
+              const stribgDateFormat = convertStringToDate.toLocaleString("fr-FR", {  year: 'numeric', month: 'numeric', day: 'numeric' }).split('/').reverse().join('-')
+              $( ".titre" ).text("Titre : "+ response.event.title );
+              $( ".description" ).text("Description : "+ response.event.description );
+              $( ".lieu" ).text("Lieu : "+ response.event.lieu );
+              $( ".date" ).text("Date : "+ stribgDateFormat );
+              $( ".statut" ).text("Statut: "+response.event.status);
+            },
+            error: function(xhr) {
+              $( "err" ).text( response.xhr );
+
+            }
+          });
+
+        });
+    </script>
+@endsection
+
+
