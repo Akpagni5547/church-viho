@@ -66,6 +66,8 @@
     "@adonisjs/session": "^6.2.0",
     "@adonisjs/shield": "^7.1.0",
     "@adonisjs/view": "^6.1.0",
+    "generate-license": "^1.0.0",
+    "license-key-gen": "^0.1.4",
     "luxon": "^3.2.1",
     "pg": "^8.8.0",
     "proxy-addr": "^2.0.7",
